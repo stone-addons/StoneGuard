@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "module": "AMD",
+    "lib": ["es2015"],
+    "outFile": "build/scripts/server/entry.js"
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
