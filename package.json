@@ -4,10 +4,10 @@
     "minecraft-scripting-types-server": "latest",
     "stoneserver-scripting-types": "latest",
     "typescript": "latest",
-    "typescript-bundle": "latest"
+    "typescript-bundle": "^1.0.12"
   },
   "scripts": {
-    "build": "tsc-bundle tsconfig.json",
-    "watch": "tsc-bundle tsconfig.json --watch"
+    "build": "tsc-bundle tsconfig.json --entryPoint main",
+    "watch": "tsc-bundle tsconfig.json --watch --entryPoint main"
   }
 }

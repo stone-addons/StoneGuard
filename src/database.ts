@@ -45,3 +45,17 @@ export const SELECT_GUARD = fix`
     AND maxZ >= $z;`;
 
 export const SELECT_GUARD_NAMES = fix`SELECT name FROM guard;`;
+export const SELECT_ALL_GUARD = fix`SELECT * FROM guard;`;
+export const SELECT_GUARD_BY_NAME = fix`SELECT * FROM guard WHERE name=$name;`;
+
+export const db = new SQLite3("guard.db");
+db.exec(CREATE_TABLE);
+
+export type RegionInfo = {
+  name: string;
+  owner: string;
+  minX: number;
+  minZ: number;
+  maxX: number;
+  maxZ: number;
+};

@@ -4,9 +4,8 @@
     "module": "AMD",
     "lib": ["es2015"],
     "target": "es6",
-    "outFile": "build/scripts/server/entry.js"
+    "outFile": "build/scripts/server/entry.js",
+    "types": ["stoneserver-scripting-types"]
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }
