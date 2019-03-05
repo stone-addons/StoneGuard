@@ -19,25 +19,16 @@ export const CREATE_TABLE = fix`
 
 export const INSERT_GUARD = fix`
   INSERT INTO guard (
-    name,
-    owner,
-    minX,
-    minZ,
-    maxX,
-    maxZ
+    name, owner, minX, minZ, maxX, maxZ
   ) values (
-    $name,
-    $owner,
-    $x0,
-    $z0,
-    $x1,
-    $z1
+    $name, $owner, $x0, $z0, $x1, $z1
   );`;
+
+export const CHOWN_GUARD = fix`UPDATE guard SET owner=$owner WHERE name=$name;`;
 
 export const SELECT_GUARD = fix`
   SELECT
-    name,
-    owner
+    name, owner
   FROM guard
   WHERE minX <= $x
     AND maxX >= $x
