@@ -38,6 +38,16 @@ export const SELECT_GUARD = fix`
 export const SELECT_GUARD_NAMES = fix`SELECT name FROM guard;`;
 export const SELECT_ALL_GUARD = fix`SELECT * FROM guard;`;
 export const SELECT_GUARD_BY_NAME = fix`SELECT * FROM guard WHERE name=$name;`;
+export const UPDATE_GUARD_BY_NAME = fix`
+  UPDATE guard
+  SET
+    name=$newname,
+    minX=min($x1, $x2),
+    minZ=min($z1, $z2),
+    maxX=max($x1, $x2),
+    maxZ=max($z1, $z2)
+  WHERE name=$name;`;
+export const DELETE_GUARD_BY_NAME = fix`DELETE FROM guard WHERE name=$name;`;
 
 export const db = new SQLite3("guard.db");
 db.exec(CREATE_TABLE);

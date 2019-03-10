@@ -9,5 +9,6 @@ system.initialize = function() {
   resolve("commands/query-region").register(this);
   resolve("commands/create-region").register(this);
   resolve("commands/transfer-region").register(this);
+  resolve("commands/alter-region").register(this);
   resolve("actions/check-ability").register(this);
 };
