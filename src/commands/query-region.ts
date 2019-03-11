@@ -6,8 +6,8 @@ import {
   RegionInfo
 } from "../database";
 
-const showRegion = ({ name, owner, minX, minZ, maxX, maxZ }: RegionInfo) =>
-  `§c§o${name}§r Owned by §a§l§n${owner}§r\nfrom (§9${minX}§r, §e${minZ}§r) to (§9${maxX}§r, §e${maxZ}§r)`;
+const showRegion = ({ name, owner, desc, dim, minX, minZ, maxX, maxZ }: RegionInfo) =>
+  `§c§o${name}§r@§1${dim}§r Owned by §a§l§n${owner}§r\nfrom (§9${minX}§r, §e${minZ}§r) to (§9${maxX}§r, §e${maxZ}§r)\n${desc}`;
 
 export function register(self: IStoneServerSystem<MySystem> & MySystem) {
   self.registerCommand("query-region", {
@@ -19,7 +19,7 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
         handler() {
           return Array.from(db.query(SELECT_ALL_GUARD, {}))
             .map(showRegion)
-            .join("\n");
+            .join("\n--------\n");
         }
       },
       {
@@ -33,7 +33,7 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
         handler($name) {
           return Array.from(db.query(SELECT_GUARD_BY_NAME, { $name }))
             .map(showRegion)
-            .join("\n");
+            .join("\n--------\n");
         }
       }
     ]

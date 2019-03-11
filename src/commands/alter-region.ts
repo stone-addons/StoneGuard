@@ -39,16 +39,19 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
               JSON.stringify({
                 type: "form",
                 title: "Region Editor: " + names[num],
-                content: `(${datas[num].minX}, ${datas[num].minZ}) to (${
-                  datas[num].maxX
-                }, ${datas[num].maxZ})`,
+                content: `dim: ${datas[num].dim}\n(${datas[num].minX}, ${
+                  datas[num].minZ
+                }) to (${datas[num].maxX}, ${datas[num].maxZ})\n${
+                  datas[num].desc
+                }`,
                 buttons: ["Edit", "Delete"].map(text => ({ text }))
               })
             );
-            num = JSON.parse(result);
-            if (typeof num == "object") return;
-            if (typeof num != "number") throw new Error("Invalid type");
-            switch (num) {
+            const sel = JSON.parse(result);
+            if (typeof sel == "object") return;
+            if (typeof sel != "number") throw new Error("Invalid type");
+            server.log(sel + "");
+            switch (sel) {
               case 0: // Edit
                 result = await this.openModalForm(
                   entity,
@@ -63,23 +66,33 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
                       },
                       {
                         type: "input",
+                        text: "desc",
+                        default: datas[num].desc
+                      },
+                      {
+                        type: "input",
+                        text: "dim",
+                        default: datas[num].dim + ""
+                      },
+                      {
+                        type: "input",
                         text: "x1",
-                        default: datas[num].minX + ''
+                        default: datas[num].minX + ""
                       },
                       {
                         type: "input",
                         text: "z1",
-                        default: datas[num].minZ + ''
+                        default: datas[num].minZ + ""
                       },
                       {
                         type: "input",
                         text: "x2",
-                        default: datas[num].maxX + ''
+                        default: datas[num].maxX + ""
                       },
                       {
                         type: "input",
                         text: "z2",
-                        default: datas[num].maxZ + ''
+                        default: datas[num].maxZ + ""
                       }
                     ]
                   })
@@ -88,10 +101,19 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
                 const obj = JSON.parse(result);
                 if (obj == null) return;
                 if (typeof obj != "object") throw new Error("Invalid type");
-                const [$newname, ...arr] = obj as [string, string, string, string, string];
-                const [$x1, $z1, $x2, $z2] = arr.map(x => +x);
+                const [$newname, $desc, ...arr] = obj as string[];
+                const [$dim, $x1, $z1, $x2, $z2] = arr.map(x => +x);
                 try {
-                  db.update(UPDATE_GUARD_BY_NAME, { $newname, $name: names[num] , $x1, $z1, $x2, $z2 });
+                  db.update(UPDATE_GUARD_BY_NAME, {
+                    $newname,
+                    $name: names[num],
+                    $desc,
+                    $dim,
+                    $x1,
+                    $z1,
+                    $x2,
+                    $z2
+                  });
                 } catch (e) {
                   server.log(e);
                 }
@@ -101,7 +123,7 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
                 break;
             }
           })().catch(e => {
-            if (e instanceof Error) server.log(e as any);
+            server.log(e as any);
           });
         }
       }
