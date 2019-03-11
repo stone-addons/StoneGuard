@@ -68,19 +68,25 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
       return false;
     }
   });
-  self.checkInteract((player, target, pos) => {
+  self.checkInteract((player, _, pos) => {
     if (pos_detect(self, player, pos)) {
       showBlock(self, player);
       return false;
     }
   });
-  self.checkUseOn((player, item, pos, vec) => {
+  self.checkUseOn((player, _1, _2, vec) => {
     if (pos_detect(self, player, vec)) {
       showBlock(self, player);
       return false;
     }
   });
   self.checkDestroy((player, pos) => {
+    if (pos_detect(self, player, pos)) {
+      showBlock(self, player);
+      return false;
+    }
+  });
+  self.checkUseBlock((player, _, pos) => {
     if (pos_detect(self, player, pos)) {
       showBlock(self, player);
       return false;
