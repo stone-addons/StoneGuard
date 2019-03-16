@@ -3,8 +3,8 @@ import { db, SELECT_GUARD_NAMES } from "./database";
 export type MySystem = SystemType<PrivSystem>;
 
 interface PrivSystem extends IStoneServerSystem<PrivSystem> {
-  registerRegionNames(this: PrivSystem): void;
-  updateRegionNames(this: PrivSystem): void;
+  registerRegionNames(this: MySystem): void;
+  updateRegionNames(this: MySystem): void;
 }
 
 export const system = server.registerSystem<PrivSystem>(0, 0);
