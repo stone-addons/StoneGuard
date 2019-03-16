@@ -1,13 +1,9 @@
 import { MySystem } from "../system";
 import { db, SELECT_GUARD } from "../database";
 
-type GuardInfo = { name: string, owner: string, desc: string };
+type GuardInfo = { name: string; owner: string; desc: string };
 
-function showBlock(
-  self: IStoneServerSystem<MySystem> & MySystem,
-  player: IEntity,
-  info: GuardInfo
-) {
+function showBlock(self: MySystem, player: IEntity, info: GuardInfo) {
   self
     .openModalForm(
       player,
@@ -23,7 +19,7 @@ function showBlock(
 }
 
 function target_detect(
-  self: IStoneServerSystem<MySystem> & MySystem,
+  self: MySystem,
   player: IEntity,
   target: IEntity
 ): GuardInfo | false {
@@ -36,11 +32,11 @@ function target_detect(
     $dim: info.dim
   });
   const filtered = Array.from(ret).filter(({ owner }) => owner != info.uuid);
-  return filtered.length ? filtered[0] as GuardInfo : false;
+  return filtered.length ? (filtered[0] as GuardInfo) : false;
 }
 
 function pos_detect(
-  self: IStoneServerSystem<MySystem> & MySystem,
+  self: MySystem,
   player: IEntity,
   [$x, y, $z]: [number, number, number]
 ): GuardInfo | false {
@@ -48,40 +44,40 @@ function pos_detect(
   if (info.permission > 0) return false;
   const ret = db.query(SELECT_GUARD, { $x, $z, $dim: info.dim });
   const filtered = Array.from(ret).filter(({ owner }) => owner != info.uuid);
-  return filtered.length ? filtered[0] as GuardInfo : false;
+  return filtered.length ? (filtered[0] as GuardInfo) : false;
 }
 
-export function register(self: IStoneServerSystem<MySystem> & MySystem) {
-  self.checkAttack((player, target) => {
+export function register(self: MySystem) {
+  self.checkAttack((player, { target }) => {
     const info = target_detect(self, player, target);
     if (info) {
       showBlock(self, player, info);
       return false;
     }
   });
-  self.checkInteract((player, _, pos) => {
-    const info = pos_detect(self, player, pos);
+  self.checkInteract((player, { blockpos }) => {
+    const info = pos_detect(self, player, blockpos);
     if (info) {
       showBlock(self, player, info);
       return false;
     }
   });
-  self.checkUseOn((player, _, pos) => {
-    const info = pos_detect(self, player, pos);
+  self.checkUseOn((player, { blockpos }) => {
+    const info = pos_detect(self, player, blockpos);
     if (info) {
       showBlock(self, player, info);
       return false;
     }
   });
-  self.checkDestroy((player, pos) => {
-    const info = pos_detect(self, player, pos);
+  self.checkDestroy((player, { blockpos }) => {
+    const info = pos_detect(self, player, blockpos);
     if (info) {
       showBlock(self, player, info);
       return false;
     }
   });
-  self.checkUseBlock((player, _, pos) => {
-    const info = pos_detect(self, player, pos);
+  self.checkUseBlock((player, { blockpos }) => {
+    const info = pos_detect(self, player, blockpos);
     if (info) {
       showBlock(self, player, info);
       return false;

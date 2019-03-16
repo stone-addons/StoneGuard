@@ -1,11 +1,15 @@
 import { db, SELECT_GUARD_NAMES } from "./database";
 
-export interface MySystem extends IStoneServerSystem<MySystem> {
-  registerRegionNames(this: MySystem): void;
-  updateRegionNames(this: MySystem): void;
+export type MySystem = SystemType<PrivSystem>;
+
+interface PrivSystem extends IStoneServerSystem<PrivSystem> {
+  registerRegionNames(this: PrivSystem): void;
+  updateRegionNames(this: PrivSystem): void;
 }
 
-export const system = server.registerSystem<MySystem>(0, 0);
+export const system = server.registerSystem<PrivSystem>(0, 0);
+
+checkApiLevel(1);
 
 system.registerRegionNames = function() {
   this.registerSoftEnum(

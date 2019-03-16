@@ -1,7 +1,7 @@
 import { MySystem } from "../system";
 import { db, INSERT_GUARD } from "../database";
 
-export function register(self: IStoneServerSystem<MySystem> & MySystem) {
+export function register(self: MySystem) {
   self.registerCommand("create-region", {
     description: "Create Region",
     permission: 1,
@@ -25,8 +25,8 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
             type: "string"
           }
         ],
-        handler(start, end, $name, $desc) {
-          const entity = this.currentCommandOrigin().entity;
+        handler(origin, [start, end, $name, $desc]) {
+          const entity = origin.entity;
           if (!entity) throw "Designed for player usage";
           const info = this.actorInfo(entity);
           if (!info.uuid) throw "Designed for player usage";
@@ -51,7 +51,10 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
           this.updateRegionNames();
           return `created ${$name}`;
         }
-      }
+      } as CommandOverload<
+        MySystem,
+        ["position", "position", "string", "string"]
+      >
     ]
   });
 }

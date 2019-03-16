@@ -2,7 +2,7 @@ import { system, MySystem } from "./system";
 
 declare function resolve(
   name: string
-): { register(input: IStoneServerSystem<MySystem> & MySystem): void };
+): { register(input: MySystem): void };
 
 system.initialize = function() {
   this.registerRegionNames();

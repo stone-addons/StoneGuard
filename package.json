@@ -2,7 +2,7 @@
   "private": true,
   "devDependencies": {
     "minecraft-scripting-types-server": "latest",
-    "stoneserver-scripting-types": "0.0.11",
+    "stoneserver-scripting-types": "^0.1.0",
     "typescript": "latest",
     "typescript-bundle": "^1.0.12"
   },

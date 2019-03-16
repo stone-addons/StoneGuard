@@ -7,15 +7,15 @@ import {
   UPDATE_GUARD_BY_NAME
 } from "../database";
 
-export function register(self: IStoneServerSystem<MySystem> & MySystem) {
+export function register(self: MySystem) {
   self.registerCommand("alter-region", {
     description: "Open Region Editor UI",
     permission: 1,
     overloads: [
       {
         parameters: [],
-        handler() {
-          const entity = this.currentCommandOrigin().entity;
+        handler(origin) {
+          const entity = origin.entity;
           if (!entity) throw "Designed for player usage";
           const datas = Array.from(
             db.query(SELECT_ALL_GUARD, {})
@@ -126,7 +126,7 @@ export function register(self: IStoneServerSystem<MySystem> & MySystem) {
             server.log(e as any);
           });
         }
-      }
+      } as CommandOverload<MySystem, []>
     ]
   });
 }
