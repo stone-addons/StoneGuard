@@ -1,5 +1,6 @@
 import { MySystem } from "../system";
 import { db, INSERT_GUARD } from "../database";
+import { isPlayerInfo } from "../utils";
 
 export function register(self: MySystem) {
   self.registerCommand("create-region", {
@@ -29,7 +30,7 @@ export function register(self: MySystem) {
           const entity = origin.entity;
           if (!entity) throw "Designed for player usage";
           const info = this.actorInfo(entity);
-          if (!info.uuid) throw "Designed for player usage";
+          if (!isPlayerInfo(info) || !info.uuid) throw "Designed for player usage";
           const [x0, , z0] = start;
           const [x1, , z1] = end;
           const $dim = info.dim;

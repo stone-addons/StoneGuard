@@ -1,5 +1,6 @@
 import { MySystem } from "../system";
 import { db, SELECT_GUARD } from "../database";
+import { isPlayerInfo } from "../utils";
 
 type GuardInfo = { name: string; owner: string; desc: string };
 
@@ -25,7 +26,7 @@ function target_detect(
 ): GuardInfo | false {
   const info = self.actorInfo(player);
   const target_info = self.actorInfo(target);
-  if (info.permission > 0) return false;
+  if (!isPlayerInfo(info) || info.permission > 0) return false;
   const ret = db.query(SELECT_GUARD, {
     $x: target_info.pos[0],
     $z: target_info.pos[2],
@@ -41,7 +42,7 @@ function pos_detect(
   [$x, y, $z]: [number, number, number]
 ): GuardInfo | false {
   const info = self.actorInfo(player);
-  if (info.permission > 0) return false;
+  if (!isPlayerInfo(info) || info.permission > 0) return false;
   const ret = db.query(SELECT_GUARD, { $x, $z, $dim: info.dim });
   const filtered = Array.from(ret).filter(({ owner }) => owner != info.uuid);
   return filtered.length ? (filtered[0] as GuardInfo) : false;

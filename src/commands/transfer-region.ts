@@ -1,5 +1,6 @@
 import { MySystem } from "../system";
 import { db, CHOWN_GUARD } from "../database";
+import { isPlayerInfo } from "../utils";
 
 export function register(self: MySystem) {
   self.registerCommand("transfer-region", {
@@ -20,7 +21,9 @@ export function register(self: MySystem) {
         ],
         handler(origin, [$name, target]) {
           if (target.length != 1) throw "check the selector!";
-          const $owner = this.actorInfo(target[0]).uuid;
+          const info = this.actorInfo(target[0]);
+          if (!isPlayerInfo(info)) throw "unexpected error"
+          const $owner = info.uuid;
           db.update(CHOWN_GUARD, { $name, $owner });
           return `transfered`;
         }
